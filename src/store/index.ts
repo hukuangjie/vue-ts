@@ -1,15 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+import { AAboutState } from "./module/about";
+
+interface AIRootState {
+  about: AAboutState;
+}
+
+export default new Vuex.Store<AIRootState>({
+  // state: {
+  // },
+  // mutations: {
+  // },
+  // actions: {
+  // },
+  modules: {}
+});

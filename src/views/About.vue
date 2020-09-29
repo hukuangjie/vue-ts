@@ -16,11 +16,17 @@
       v-bind="item"
       :key="item.id"
     ></user>
+
+    <hr />
+
+    <p>{{ count }} <button @click="add">+1</button></p>
+    <p>{{ filterList.join("-") }}</p>
   </div>
 </template>
 <script lang="ts">
 import { Component, Watch, Vue } from "vue-property-decorator";
 import User from "../components/User.vue";
+import { AboutStore } from "../store/module/about";
 /**
  * vue-property-decorator 装饰器
  * @Component
@@ -43,6 +49,13 @@ interface AIUser {
 })
 export default class About extends Vue {
   // 初始数据可以直接声明为实例的 property
+
+  get count() {
+    return AboutStore.count;
+  }
+  get filterList() {
+    return AboutStore.filterList;
+  }
   firstName = "zhang";
   lastName = "san";
   userList: Array<AIUser> = [
@@ -64,7 +77,9 @@ export default class About extends Vue {
       age: 12,
     },
   ];
-
+  add() {
+    AboutStore.updateCount(1);
+  }
   // 组件方法也可以直接声明为实例的方法
   get fullName() {
     return this.firstName + " " + this.lastName;
@@ -80,10 +95,8 @@ export default class About extends Vue {
     this.userList.splice(index, 1);
   }
   changeAge(id: number) {
-    const user: AIUser | undefined = this.userList.find(
-      (user) => user.id === id
-    );
-    user && user.age++;
+    const user: AIUser = this.userList.find((user) => user.id === id)!;
+    user.age++;
   }
   modifyFullname() {
     this.fullName = "li si";
@@ -97,7 +110,9 @@ export default class About extends Vue {
     this.fullName = "wang wu";
   }
   mounted() {
-    this.fullName = "zhao liu";
+    AboutStore.getList().then((res) => {
+      console.log("获取成功");
+    });
   }
 }
 </script>
